@@ -5,9 +5,17 @@ function App() {
   return (
     <div className="min-h-screen bg-slate-950 text-white">
       {/* Hero Section */}
-      <header className="relative overflow-hidden">
-        {/* Background gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-slate-950 to-emerald-900/20" />
+      <header
+        className="relative min-h-screen w-full overflow-hidden"
+        style={{
+          backgroundImage: `url('https://image.admin.solutions/homepage-background-image/141f6617-6095-43ee-bd53-44124cd7909e/f06aa3ec-6401-454f-a502-6752ddda4ba3/c19b2321-0bcb-481e-84f7-d177857f060b')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      >
+        {/* Dark overlay for better text readability */}
+        <div className="absolute inset-0 bg-black/50" />
 
         {/* Navigation */}
         <nav className="relative z-10 flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
@@ -28,7 +36,7 @@ function App() {
         </nav>
 
         {/* Hero Content */}
-        <div className="relative z-10 max-w-7xl mx-auto px-6 py-24 md:py-32 text-center">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 flex flex-col items-center justify-center min-h-[calc(100vh-80px)] text-center">
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold mb-6">
             <span className="bg-gradient-to-r from-emerald-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
               Own Your Music.
