@@ -5,118 +5,166 @@ import {
   ShoppingBag, Globe, Crown, Play, Shield, Zap, Star,
   Menu, X, ExternalLink
 } from 'lucide-react';
+import { useLanguage } from './context/LanguageContext';
+
+// Language Switcher Component
+function LanguageSwitcher() {
+  const { language, setLanguage, languages } = useLanguage();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const currentLang = languages.find(l => l.code === language);
+
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center gap-2 px-3 py-1.5 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-700 rounded-lg text-sm transition"
+      >
+        <Globe className="w-4 h-4" />
+        <span>{currentLang?.nativeName}</span>
+        <ChevronDown className={`w-3 h-3 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+      </button>
+
+      {isOpen && (
+        <>
+          <div
+            className="fixed inset-0 z-40"
+            onClick={() => setIsOpen(false)}
+          />
+          <div className="absolute right-0 top-full mt-2 py-2 bg-slate-900 border border-slate-700 rounded-lg shadow-xl z-50 min-w-[140px]">
+            {languages.map((lang) => (
+              <button
+                key={lang.code}
+                onClick={() => {
+                  setLanguage(lang.code);
+                  setIsOpen(false);
+                }}
+                className={`w-full px-4 py-2 text-left text-sm hover:bg-slate-800 transition ${
+                  language === lang.code ? 'text-emerald-400' : 'text-slate-300'
+                }`}
+              >
+                {lang.nativeName}
+              </button>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
 
 function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { t, tArray } = useLanguage();
 
   const services = [
     {
       id: 'music',
-      title: 'Music, Sports & Entertainment',
+      titleKey: 'services.items.music.title',
       icon: Music,
       color: 'emerald',
       size: 'large',
       image: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&q=80',
-      shortDesc: 'Digital Multimedia Experiences (DME) for artists and fans',
+      shortDescKey: 'services.items.music.shortDesc',
     },
     {
       id: 'ticketing',
-      title: 'Ticketing',
+      titleKey: 'services.items.ticketing.title',
       icon: Ticket,
       color: 'purple',
       size: 'medium',
       image: 'https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?w=600&q=80',
-      shortDesc: 'Smart Ticket APP (S.T.APP) technology',
+      shortDescKey: 'services.items.ticketing.shortDesc',
     },
     {
       id: 'fanclubs',
-      title: 'Fan Clubs',
+      titleKey: 'services.items.fanclubs.title',
       icon: Heart,
       color: 'pink',
       size: 'medium',
       image: 'https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?w=600&q=80',
-      shortDesc: 'Build communities around what matters',
+      shortDescKey: 'services.items.fanclubs.shortDesc',
     },
     {
       id: 'fractional',
-      title: 'Fractional Ownership',
+      titleKey: 'services.items.fractional.title',
       icon: PieChart,
       color: 'blue',
       size: 'medium',
       image: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&q=80',
-      shortDesc: 'Own a piece of something amazing',
+      shortDescKey: 'services.items.fractional.shortDesc',
     },
     {
       id: 'art',
-      title: 'Art',
+      titleKey: 'services.items.art.title',
       icon: Palette,
       color: 'amber',
       size: 'medium',
       image: 'https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=600&q=80',
-      shortDesc: 'Revolutionary way to buy, sell and own art',
+      shortDescKey: 'services.items.art.shortDesc',
     },
     {
       id: 'movies',
-      title: 'Movies',
+      titleKey: 'services.items.movies.title',
       icon: Film,
       color: 'red',
       size: 'large',
       image: 'https://images.unsplash.com/photo-1485846234645-a62644f84728?w=800&q=80',
-      shortDesc: 'Film distribution reimagined',
+      shortDescKey: 'services.items.movies.shortDesc',
     },
     {
       id: 'apps',
-      title: 'Apps',
+      titleKey: 'services.items.apps.title',
       icon: Smartphone,
       color: 'cyan',
       size: 'medium',
       image: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=600&q=80',
-      shortDesc: 'Every NFT is its own APP',
+      shortDescKey: 'services.items.apps.shortDesc',
     },
     {
       id: 'sponsorship',
-      title: 'Fractional Sponsorship',
+      titleKey: 'services.items.sponsorship.title',
       icon: Star,
       color: 'orange',
       size: 'medium',
       image: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=600&q=80',
-      shortDesc: 'Unique sponsorship opportunities',
+      shortDescKey: 'services.items.sponsorship.shortDesc',
     },
     {
       id: 'payments',
-      title: 'Payments',
+      titleKey: 'services.items.payments.title',
       icon: CreditCard,
       color: 'green',
       size: 'medium',
       image: 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=600&q=80',
-      shortDesc: 'Multi-currency payment solutions',
+      shortDescKey: 'services.items.payments.shortDesc',
     },
     {
       id: 'merchandise',
-      title: 'Merchandise & Food Sales',
+      titleKey: 'services.items.merchandise.title',
       icon: ShoppingBag,
       color: 'yellow',
       size: 'medium',
       image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&q=80',
-      shortDesc: 'Seamless event commerce',
+      shortDescKey: 'services.items.merchandise.shortDesc',
     },
     {
       id: 'currency',
-      title: 'Currency Exchange',
+      titleKey: 'services.items.currency.title',
       icon: Globe,
       color: 'teal',
       size: 'medium',
       image: 'https://images.unsplash.com/photo-1580519542036-c47de6196ba5?w=600&q=80',
-      shortDesc: 'Fiat and crypto integration',
+      shortDescKey: 'services.items.currency.shortDesc',
     },
     {
       id: 'membership',
-      title: 'Membership & Subscription Programs',
+      titleKey: 'services.items.membership.title',
       icon: Crown,
       color: 'indigo',
       size: 'large',
       image: 'https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=800&q=80',
-      shortDesc: 'NFT-based loyalty and membership',
+      shortDescKey: 'services.items.membership.shortDesc',
     },
   ];
 
@@ -150,22 +198,23 @@ function App() {
                 <span className="text-xl font-bold bg-gradient-to-r from-emerald-400 to-purple-400 bg-clip-text text-transparent">
                   DigiTree.ph
                 </span>
-                <span className="text-[10px] text-slate-500 -mt-1">Powered by SeeMyNFT</span>
+                <span className="text-[10px] text-slate-500 -mt-1">{t('nav.poweredBy')}</span>
               </div>
             </div>
 
             <div className="hidden md:flex items-center gap-6">
-              <a href="#services" className="text-slate-300 hover:text-white transition text-sm">Services</a>
-              <a href="#music" className="text-slate-300 hover:text-white transition text-sm">For Artists</a>
-              <a href="#fanclubs" className="text-slate-300 hover:text-white transition text-sm">For Fans</a>
+              <a href="#services" className="text-slate-300 hover:text-white transition text-sm">{t('nav.services')}</a>
+              <a href="#music" className="text-slate-300 hover:text-white transition text-sm">{t('nav.forArtists')}</a>
+              <a href="#fanclubs" className="text-slate-300 hover:text-white transition text-sm">{t('nav.forFans')}</a>
               <a href="https://seemynft.page" target="_blank" rel="noopener noreferrer" className="text-slate-300 hover:text-white transition text-sm flex items-center gap-1">
-                Platform <ExternalLink className="w-3 h-3" />
+                {t('nav.platform')} <ExternalLink className="w-3 h-3" />
               </a>
             </div>
 
             <div className="flex items-center gap-3">
+              <LanguageSwitcher />
               <button className="hidden sm:block px-4 py-2 bg-gradient-to-r from-emerald-500 to-purple-500 hover:from-emerald-400 hover:to-purple-400 rounded-lg font-medium transition text-sm">
-                Get Started
+                {t('nav.getStarted')}
               </button>
               <button
                 className="md:hidden p-2"
@@ -181,14 +230,14 @@ function App() {
         {mobileMenuOpen && (
           <div className="md:hidden bg-slate-900 border-t border-slate-800">
             <div className="px-4 py-4 space-y-3">
-              <a href="#services" className="block text-slate-300 hover:text-white transition">Services</a>
-              <a href="#music" className="block text-slate-300 hover:text-white transition">For Artists</a>
-              <a href="#fanclubs" className="block text-slate-300 hover:text-white transition">For Fans</a>
+              <a href="#services" className="block text-slate-300 hover:text-white transition">{t('nav.services')}</a>
+              <a href="#music" className="block text-slate-300 hover:text-white transition">{t('nav.forArtists')}</a>
+              <a href="#fanclubs" className="block text-slate-300 hover:text-white transition">{t('nav.forFans')}</a>
               <a href="https://seemynft.page" target="_blank" rel="noopener noreferrer" className="block text-slate-300 hover:text-white transition">
-                Platform
+                {t('nav.platform')}
               </a>
               <button className="w-full px-4 py-2 bg-gradient-to-r from-emerald-500 to-purple-500 rounded-lg font-medium">
-                Get Started
+                {t('nav.getStarted')}
               </button>
             </div>
           </div>
@@ -210,43 +259,42 @@ function App() {
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 flex flex-col items-center justify-center min-h-[calc(100vh-64px)] text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/30 rounded-full mb-6">
             <Zap className="w-4 h-4 text-emerald-400" />
-            <span className="text-sm text-emerald-400">Built on SeeMyNFT.page Platform</span>
+            <span className="text-sm text-emerald-400">{t('hero.badge')}</span>
           </div>
 
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6">
             <span className="bg-gradient-to-r from-emerald-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-              The Future of
+              {t('hero.titleLine1')}
             </span>
             <br />
-            <span className="text-white">Music & Entertainment</span>
+            <span className="text-white">{t('hero.titleLine2')}</span>
           </h1>
 
           <p className="text-lg sm:text-xl md:text-2xl text-slate-300 max-w-3xl mx-auto mb-8">
-            Digital Multimedia Experiences (DME) that connect artists directly with fans.
-            Own your music. Trade your collectibles. Build your legacy.
+            {t('hero.description')}
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
             <button className="px-8 py-4 bg-gradient-to-r from-emerald-500 to-emerald-400 hover:from-emerald-400 hover:to-emerald-300 rounded-xl font-semibold text-lg flex items-center justify-center gap-2 transition shadow-lg shadow-emerald-500/25">
-              Explore Services <ArrowRight className="w-5 h-5" />
+              {t('hero.exploreServices')} <ArrowRight className="w-5 h-5" />
             </button>
             <button className="px-8 py-4 border border-slate-600 hover:border-slate-500 hover:bg-slate-800/50 rounded-xl font-semibold text-lg transition flex items-center justify-center gap-2">
-              <Play className="w-5 h-5" /> Watch Demo
+              <Play className="w-5 h-5" /> {t('hero.watchDemo')}
             </button>
           </div>
 
           <div className="grid grid-cols-3 gap-8 max-w-2xl">
             <div className="text-center">
               <div className="text-3xl md:text-4xl font-bold text-emerald-400">90%+</div>
-              <div className="text-sm text-slate-400">Artist Revenue</div>
+              <div className="text-sm text-slate-400">{t('hero.stats.artistRevenue')}</div>
             </div>
             <div className="text-center">
               <div className="text-3xl md:text-4xl font-bold text-purple-400">12+</div>
-              <div className="text-sm text-slate-400">Integrated Services</div>
+              <div className="text-sm text-slate-400">{t('hero.stats.integratedServices')}</div>
             </div>
             <div className="text-center">
               <div className="text-3xl md:text-4xl font-bold text-pink-400">100%</div>
-              <div className="text-sm text-slate-400">True Ownership</div>
+              <div className="text-sm text-slate-400">{t('hero.stats.trueOwnership')}</div>
             </div>
           </div>
         </div>
@@ -261,10 +309,10 @@ function App() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Complete NFT Ecosystem
+              {t('services.title')}
             </h2>
             <p className="text-xl text-slate-400 max-w-2xl mx-auto">
-              Everything you need to create, distribute, and monetize digital experiences
+              {t('services.description')}
             </p>
           </div>
 
@@ -295,10 +343,10 @@ function App() {
                       <Icon className={`w-6 h-6 ${colors.text}`} />
                     </div>
                     <h3 className={`${isLarge ? 'text-2xl' : 'text-lg'} font-bold mb-2`}>
-                      {service.title}
+                      {t(service.titleKey)}
                     </h3>
                     <p className="text-slate-300 text-sm">
-                      {service.shortDesc}
+                      {t(service.shortDescKey)}
                     </p>
                   </div>
                 </a>
@@ -315,13 +363,13 @@ function App() {
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/30 rounded-full mb-6">
                 <Music className="w-4 h-4 text-emerald-400" />
-                <span className="text-sm text-emerald-400">DME Technology</span>
+                <span className="text-sm text-emerald-400">{t('musicSection.badge')}</span>
               </div>
               <h2 className="text-3xl md:text-4xl font-bold mb-6">
-                Music, Sports & Entertainment
+                {t('musicSection.title')}
               </h2>
               <p className="text-lg text-slate-300 mb-8">
-                DME means Digital Multimedia Experience. With DMEs, artists, promoters, athletes, and performers can distribute music, art, sporting events and entertainment, and build strong relationships with fans. Our NFTs are experiences within themselves.
+                {t('musicSection.description')}
               </p>
 
               <div className="space-y-6">
@@ -330,8 +378,8 @@ function App() {
                     <Shield className="w-5 h-5 text-emerald-400" />
                   </div>
                   <div>
-                    <h4 className="font-semibold mb-1">True Digital Ownership</h4>
-                    <p className="text-slate-400 text-sm">Just like physical media - vinyl, tape, CD - now tokenized and distributed digitally. Own, access, and resell your favorite content.</p>
+                    <h4 className="font-semibold mb-1">{t('musicSection.features.ownership.title')}</h4>
+                    <p className="text-slate-400 text-sm">{t('musicSection.features.ownership.description')}</p>
                   </div>
                 </div>
 
@@ -340,8 +388,8 @@ function App() {
                     <Wallet className="w-5 h-5 text-purple-400" />
                   </div>
                   <div>
-                    <h4 className="font-semibold mb-1">Control Back in Your Hands</h4>
-                    <p className="text-slate-400 text-sm">Artists earn more, fans can collect and resell. Each DME is a unique experience with integrated legal policies.</p>
+                    <h4 className="font-semibold mb-1">{t('musicSection.features.control.title')}</h4>
+                    <p className="text-slate-400 text-sm">{t('musicSection.features.control.description')}</p>
                   </div>
                 </div>
 
@@ -350,8 +398,8 @@ function App() {
                     <Zap className="w-5 h-5 text-pink-400" />
                   </div>
                   <div>
-                    <h4 className="font-semibold mb-1">Beyond Just Music</h4>
-                    <p className="text-slate-400 text-sm">Limited-edition tracks, signed album art, integrated tour tickets - your music IS your ticket. Embedded utility, freebies, and merchandise.</p>
+                    <h4 className="font-semibold mb-1">{t('musicSection.features.beyond.title')}</h4>
+                    <p className="text-slate-400 text-sm">{t('musicSection.features.beyond.description')}</p>
                   </div>
                 </div>
 
@@ -360,8 +408,8 @@ function App() {
                     <Users className="w-5 h-5 text-blue-400" />
                   </div>
                   <div>
-                    <h4 className="font-semibold mb-1">Crowdfund Your Dreams</h4>
-                    <p className="text-slate-400 text-sm">Sell special DME NFTs for crowdfunding to your exclusive fanbase. Get in early and own the next greatest hit.</p>
+                    <h4 className="font-semibold mb-1">{t('musicSection.features.crowdfund.title')}</h4>
+                    <p className="text-slate-400 text-sm">{t('musicSection.features.crowdfund.description')}</p>
                   </div>
                 </div>
               </div>
@@ -377,7 +425,7 @@ function App() {
               </div>
               <div className="absolute -bottom-6 -left-6 bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-xl">
                 <div className="text-2xl font-bold text-emerald-400">90%+</div>
-                <div className="text-sm text-slate-400">Goes to Artists</div>
+                <div className="text-sm text-slate-400">{t('musicSection.goesToArtists')}</div>
               </div>
             </div>
           </div>
@@ -397,34 +445,25 @@ function App() {
                 />
               </div>
               <div className="absolute -top-6 -right-6 bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-xl">
-                <div className="text-lg font-bold text-purple-400">S.T.APP</div>
-                <div className="text-xs text-slate-400">Smart Ticket APP</div>
+                <div className="text-lg font-bold text-purple-400">{t('ticketing.stapp')}</div>
+                <div className="text-xs text-slate-400">{t('ticketing.smartTicketApp')}</div>
               </div>
             </div>
 
             <div className="order-1 lg:order-2">
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-purple-500/10 border border-purple-500/30 rounded-full mb-6">
                 <Ticket className="w-4 h-4 text-purple-400" />
-                <span className="text-sm text-purple-400">NFT Ticketing</span>
+                <span className="text-sm text-purple-400">{t('ticketing.badge')}</span>
               </div>
               <h2 className="text-3xl md:text-4xl font-bold mb-6">
-                The Smart Ticket APP
+                {t('ticketing.title')}
               </h2>
               <p className="text-lg text-slate-300 mb-8">
-                Tokenize your event tickets - they become iconic valuable souvenir ticket stubs of an unforgettable experience. Each NFT ticket is an APP within itself that morphs through the event lifecycle.
+                {t('ticketing.description')}
               </p>
 
               <div className="grid sm:grid-cols-2 gap-4">
-                {[
-                  'Facial Recognition or QR Entry',
-                  'Every Ticket is an APP',
-                  'Control Resales',
-                  'Positive ID of Owner',
-                  'In-Seat Contactless Ordering',
-                  'Resellable Souvenir',
-                  'Post-Event Content Streaming',
-                  'Turnkey POS Integration'
-                ].map((feature, index) => (
+                {tArray('ticketing.features').map((feature, index) => (
                   <div key={index} className="flex items-center gap-2">
                     <div className="w-5 h-5 rounded-full bg-purple-500/20 flex items-center justify-center">
                       <div className="w-2 h-2 rounded-full bg-purple-400" />
@@ -444,11 +483,11 @@ function App() {
           <div className="text-center mb-16">
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-pink-500/10 border border-pink-500/30 rounded-full mb-6">
               <Heart className="w-4 h-4 text-pink-400" />
-              <span className="text-sm text-pink-400">Community Building</span>
+              <span className="text-sm text-pink-400">{t('fanClubs.badge')}</span>
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Fan Clubs</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">{t('fanClubs.title')}</h2>
             <p className="text-xl text-slate-400 max-w-2xl mx-auto">
-              NFT Fan Clubs bring creators and fans together like never before
+              {t('fanClubs.description')}
             </p>
           </div>
 
@@ -457,9 +496,9 @@ function App() {
               <div className="w-14 h-14 bg-pink-500/10 rounded-xl flex items-center justify-center mb-6">
                 <Crown className="w-7 h-7 text-pink-400" />
               </div>
-              <h3 className="text-xl font-semibold mb-3">Maintain Membership</h3>
+              <h3 className="text-xl font-semibold mb-3">{t('fanClubs.cards.membership.title')}</h3>
               <p className="text-slate-400">
-                Access perks and offerings integrated directly into your NFT - no Discord or external platforms required.
+                {t('fanClubs.cards.membership.description')}
               </p>
             </div>
 
@@ -467,9 +506,9 @@ function App() {
               <div className="w-14 h-14 bg-pink-500/10 rounded-xl flex items-center justify-center mb-6">
                 <Users className="w-7 h-7 text-pink-400" />
               </div>
-              <h3 className="text-xl font-semibold mb-3">Build Community</h3>
+              <h3 className="text-xl font-semibold mb-3">{t('fanClubs.cards.community.title')}</h3>
               <p className="text-slate-400">
-                Encourage brand loyalty, build valuable communities, and let fans share in the upside as the community grows.
+                {t('fanClubs.cards.community.description')}
               </p>
             </div>
 
@@ -477,9 +516,9 @@ function App() {
               <div className="w-14 h-14 bg-pink-500/10 rounded-xl flex items-center justify-center mb-6">
                 <Star className="w-7 h-7 text-pink-400" />
               </div>
-              <h3 className="text-xl font-semibold mb-3">Scarcity & Value</h3>
+              <h3 className="text-xl font-semibold mb-3">{t('fanClubs.cards.scarcity.title')}</h3>
               <p className="text-slate-400">
-                NFTs prove ownership and guarantee limited releases. Creators control secondary markets and earn passive income.
+                {t('fanClubs.cards.scarcity.description')}
               </p>
             </div>
           </div>
@@ -494,14 +533,14 @@ function App() {
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-500/10 border border-blue-500/30 rounded-full mb-6">
                 <PieChart className="w-4 h-4 text-blue-400" />
-                <span className="text-sm text-blue-400">Shared Ownership</span>
+                <span className="text-sm text-blue-400">{t('fractionalOwnership.badge')}</span>
               </div>
-              <h2 className="text-2xl md:text-3xl font-bold mb-6">Fractional Ownership</h2>
+              <h2 className="text-2xl md:text-3xl font-bold mb-6">{t('fractionalOwnership.title')}</h2>
               <p className="text-slate-300 mb-6">
-                Everyone should be able to own even the most expensive cool things - Art, Collectibles, Memorabilia. Our NFTs give you the chance to own a piece of something amazing alongside others.
+                {t('fractionalOwnership.description')}
               </p>
               <div className="space-y-3">
-                {['Rare Cars', 'Jewelry', 'Real Estate', 'Collectibles', 'Artwork'].map((item) => (
+                {tArray('fractionalOwnership.items').map((item) => (
                   <div key={item} className="flex items-center gap-3 text-slate-400">
                     <div className="w-2 h-2 rounded-full bg-blue-400" />
                     {item}
@@ -514,14 +553,14 @@ function App() {
             <div id="art">
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-amber-500/10 border border-amber-500/30 rounded-full mb-6">
                 <Palette className="w-4 h-4 text-amber-400" />
-                <span className="text-sm text-amber-400">Digital Art</span>
+                <span className="text-sm text-amber-400">{t('artSection.badge')}</span>
               </div>
-              <h2 className="text-2xl md:text-3xl font-bold mb-6">Art</h2>
+              <h2 className="text-2xl md:text-3xl font-bold mb-6">{t('artSection.title')}</h2>
               <p className="text-slate-300 mb-6">
-                DME NFTs combined with Fractional Ownership create a revolutionary way to buy, sell, and own art. Document provenance, tell the story, and show the world what you own.
+                {t('artSection.description')}
               </p>
               <div className="space-y-3">
-                {['Convert artworks to DME NFTs', 'Fractionalize and sell on Marketplace', 'Document complete provenance', 'Pioneer art market royalties', 'Build collector audiences'].map((item) => (
+                {tArray('artSection.items').map((item) => (
                   <div key={item} className="flex items-center gap-3 text-slate-400">
                     <div className="w-2 h-2 rounded-full bg-amber-400" />
                     {item}
@@ -540,11 +579,11 @@ function App() {
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-red-500/10 border border-red-500/30 rounded-full mb-6">
                 <Film className="w-4 h-4 text-red-400" />
-                <span className="text-sm text-red-400">Film Distribution</span>
+                <span className="text-sm text-red-400">{t('movies.badge')}</span>
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">Movies</h2>
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">{t('movies.title')}</h2>
               <p className="text-lg text-slate-300 mb-8">
-                Transform film distribution with DME NFTs. Filmmakers can release movies, documentaries, and exclusive content directly to audiences. Viewers own their copies and can resell them - just like physical DVDs and Blu-rays, but digital.
+                {t('movies.description')}
               </p>
               <div className="space-y-4">
                 <div className="flex gap-4">
@@ -552,8 +591,8 @@ function App() {
                     <Play className="w-5 h-5 text-red-400" />
                   </div>
                   <div>
-                    <h4 className="font-semibold mb-1">Direct Distribution</h4>
-                    <p className="text-slate-400 text-sm">Bypass traditional distributors and connect directly with your audience.</p>
+                    <h4 className="font-semibold mb-1">{t('movies.features.distribution.title')}</h4>
+                    <p className="text-slate-400 text-sm">{t('movies.features.distribution.description')}</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
@@ -561,8 +600,8 @@ function App() {
                     <Shield className="w-5 h-5 text-red-400" />
                   </div>
                   <div>
-                    <h4 className="font-semibold mb-1">Perpetual Royalties</h4>
-                    <p className="text-slate-400 text-sm">Earn on every resale in the secondary market automatically.</p>
+                    <h4 className="font-semibold mb-1">{t('movies.features.royalties.title')}</h4>
+                    <p className="text-slate-400 text-sm">{t('movies.features.royalties.description')}</p>
                   </div>
                 </div>
               </div>
@@ -594,20 +633,20 @@ function App() {
             <div className="order-1 lg:order-2">
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-cyan-500/10 border border-cyan-500/30 rounded-full mb-6">
                 <Smartphone className="w-4 h-4 text-cyan-400" />
-                <span className="text-sm text-cyan-400">Patent Pending</span>
+                <span className="text-sm text-cyan-400">{t('apps.badge')}</span>
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">Apps</h2>
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">{t('apps.title')}</h2>
               <p className="text-lg text-slate-300 mb-8">
-                Every NFT can be its own APP with whatever functionality the creator wants. No need to download anything - just purchase the token and you have integrated access to all functionality.
+                {t('apps.description')}
               </p>
               <div className="bg-slate-900/50 rounded-2xl border border-slate-800 p-6">
-                <h4 className="font-semibold mb-4 text-cyan-400">Tokenization of a Webpage</h4>
+                <h4 className="font-semibold mb-4 text-cyan-400">{t('apps.tokenization')}</h4>
                 <p className="text-slate-400 mb-4">
-                  Our patent-pending technology tokenizes a unique webpage for each token owner with all its inherent functionality.
+                  {t('apps.tokenizationDesc')}
                 </p>
                 <div className="flex items-center gap-3 p-4 bg-cyan-500/10 rounded-xl">
                   <Zap className="w-6 h-6 text-cyan-400" />
-                  <span className="font-medium">Avoid App Store Tax</span>
+                  <span className="font-medium">{t('apps.avoidTax')}</span>
                 </div>
               </div>
             </div>
@@ -621,26 +660,26 @@ function App() {
           <div className="text-center mb-16">
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-orange-500/10 border border-orange-500/30 rounded-full mb-6">
               <Star className="w-4 h-4 text-orange-400" />
-              <span className="text-sm text-orange-400">Innovative Funding</span>
+              <span className="text-sm text-orange-400">{t('sponsorship.badge')}</span>
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Fractional Sponsorship</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">{t('sponsorship.title')}</h2>
             <p className="text-xl text-slate-400 max-w-3xl mx-auto">
-              Museums, zoos, and institutions can provide unique sponsorship opportunities through NFT technology. Imagine sponsoring a penguin exhibit at a zoo - your name displayed on a live screen, resellable with the institution earning royalties.
+              {t('sponsorship.description')}
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
             <div className="p-6 bg-slate-900/50 rounded-2xl border border-slate-800">
-              <h4 className="font-semibold mb-3">Dynamic Recognition</h4>
-              <p className="text-slate-400 text-sm">Internet-connected displays show sponsor names in real-time, automatically updating on ownership transfer.</p>
+              <h4 className="font-semibold mb-3">{t('sponsorship.cards.recognition.title')}</h4>
+              <p className="text-slate-400 text-sm">{t('sponsorship.cards.recognition.description')}</p>
             </div>
             <div className="p-6 bg-slate-900/50 rounded-2xl border border-slate-800">
-              <h4 className="font-semibold mb-3">Resale Participation</h4>
-              <p className="text-slate-400 text-sm">Sponsors can resell their sponsorship, with institutions receiving royalties on each transfer.</p>
+              <h4 className="font-semibold mb-3">{t('sponsorship.cards.resale.title')}</h4>
+              <p className="text-slate-400 text-sm">{t('sponsorship.cards.resale.description')}</p>
             </div>
             <div className="p-6 bg-slate-900/50 rounded-2xl border border-slate-800">
-              <h4 className="font-semibold mb-3">Flexible Options</h4>
-              <p className="text-slate-400 text-sm">Daily sponsorships, hourly naming rights, fractional sponsorships - accessible to everyone, not just the wealthy.</p>
+              <h4 className="font-semibold mb-3">{t('sponsorship.cards.flexible.title')}</h4>
+              <p className="text-slate-400 text-sm">{t('sponsorship.cards.flexible.description')}</p>
             </div>
           </div>
         </div>
@@ -654,20 +693,14 @@ function App() {
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-green-500/10 border border-green-500/30 rounded-full mb-6">
                 <CreditCard className="w-4 h-4 text-green-400" />
-                <span className="text-sm text-green-400">Payment Platform</span>
+                <span className="text-sm text-green-400">{t('payments.badge')}</span>
               </div>
-              <h2 className="text-2xl md:text-3xl font-bold mb-6">Payments</h2>
+              <h2 className="text-2xl md:text-3xl font-bold mb-6">{t('payments.title')}</h2>
               <p className="text-slate-300 mb-6">
-                A complete, highly scalable, fast, and secure payment solution that handles and processes payments in multiple currencies with NFTs.
+                {t('payments.description')}
               </p>
               <div className="space-y-4">
-                {[
-                  'Multi-Currency Support (Crypto, Native, FIAT)',
-                  'Templated Transaction Mapping',
-                  'Multi-Party Transaction Grouping',
-                  'Full Auditability',
-                  'Smart Contract Auto-Triggers'
-                ].map((item) => (
+                {tArray('payments.features').map((item) => (
                   <div key={item} className="flex items-center gap-3 text-slate-400">
                     <div className="w-2 h-2 rounded-full bg-green-400" />
                     {item}
@@ -680,24 +713,24 @@ function App() {
             <div id="currency">
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-teal-500/10 border border-teal-500/30 rounded-full mb-6">
                 <Globe className="w-4 h-4 text-teal-400" />
-                <span className="text-sm text-teal-400">Currency Integration</span>
+                <span className="text-sm text-teal-400">{t('currency.badge')}</span>
               </div>
-              <h2 className="text-2xl md:text-3xl font-bold mb-6">Currency Exchange</h2>
+              <h2 className="text-2xl md:text-3xl font-bold mb-6">{t('currency.title')}</h2>
               <p className="text-slate-300 mb-6">
-                NFTs are no longer limited to cryptocurrency transactions. Our platform integrates fiat currency for seamless buying and selling - making it easier for newcomers to join the NFT ecosystem.
+                {t('currency.description')}
               </p>
               <div className="grid grid-cols-3 gap-4">
                 <div className="p-4 bg-slate-900/50 rounded-xl text-center">
                   <div className="text-2xl mb-2">$</div>
-                  <div className="text-sm text-slate-400">USD</div>
+                  <div className="text-sm text-slate-400">{t('currency.usd')}</div>
                 </div>
                 <div className="p-4 bg-slate-900/50 rounded-xl text-center">
                   <div className="text-2xl mb-2">ETH</div>
-                  <div className="text-sm text-slate-400">Crypto</div>
+                  <div className="text-sm text-slate-400">{t('currency.crypto')}</div>
                 </div>
                 <div className="p-4 bg-slate-900/50 rounded-xl text-center">
                   <div className="text-2xl mb-2">PHP</div>
-                  <div className="text-sm text-slate-400">Peso</div>
+                  <div className="text-sm text-slate-400">{t('currency.peso')}</div>
                 </div>
               </div>
             </div>
@@ -712,23 +745,14 @@ function App() {
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-yellow-500/10 border border-yellow-500/30 rounded-full mb-6">
                 <ShoppingBag className="w-4 h-4 text-yellow-400" />
-                <span className="text-sm text-yellow-400">Event Commerce</span>
+                <span className="text-sm text-yellow-400">{t('merchandise.badge')}</span>
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">Merchandise & Food Sales</h2>
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">{t('merchandise.title')}</h2>
               <p className="text-lg text-slate-300 mb-8">
-                Seamless integration of NFTs with payment systems and inventory. The same NFT ticket used to enter the event becomes the APP for ordering food and merchandise inside the venue.
+                {t('merchandise.description')}
               </p>
               <div className="grid sm:grid-cols-2 gap-4">
-                {[
-                  'Integrated Inventory Management',
-                  'Contactless Ordering',
-                  'In-Seat Delivery',
-                  'Better Fan Satisfaction',
-                  'Staffing Efficiencies',
-                  'Increased Sales',
-                  'Eliminate Queue Lines',
-                  'Quick Setup (Minutes)'
-                ].map((feature, index) => (
+                {tArray('merchandise.features').map((feature, index) => (
                   <div key={index} className="flex items-center gap-2">
                     <div className="w-5 h-5 rounded-full bg-yellow-500/20 flex items-center justify-center">
                       <div className="w-2 h-2 rounded-full bg-yellow-400" />
@@ -755,20 +779,20 @@ function App() {
           <div className="text-center mb-16">
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-indigo-500/10 border border-indigo-500/30 rounded-full mb-6">
               <Crown className="w-4 h-4 text-indigo-400" />
-              <span className="text-sm text-indigo-400">Loyalty Programs</span>
+              <span className="text-sm text-indigo-400">{t('membership.badge')}</span>
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Membership & Subscription Programs</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">{t('membership.title')}</h2>
             <p className="text-xl text-slate-400 max-w-3xl mx-auto">
-              Grow your brand, build strong connections with loyal members, and monetize your content with NFT-based membership programs.
+              {t('membership.description')}
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { icon: Music, title: 'Digital Assets', desc: 'Music, movies, exclusive content' },
-              { icon: ShoppingBag, title: 'Physical Items', desc: 'Clothes, merchandise, collectibles' },
-              { icon: Ticket, title: 'Event Access', desc: 'Special events, VIP experiences' },
-              { icon: Star, title: 'Points & Rewards', desc: 'Earn, exchange, and redeem' }
+              { icon: Music, titleKey: 'membership.cards.digital.title', descKey: 'membership.cards.digital.description' },
+              { icon: ShoppingBag, titleKey: 'membership.cards.physical.title', descKey: 'membership.cards.physical.description' },
+              { icon: Ticket, titleKey: 'membership.cards.events.title', descKey: 'membership.cards.events.description' },
+              { icon: Star, titleKey: 'membership.cards.rewards.title', descKey: 'membership.cards.rewards.description' }
             ].map((item, index) => {
               const Icon = item.icon;
               return (
@@ -776,8 +800,8 @@ function App() {
                   <div className="w-14 h-14 bg-indigo-500/10 rounded-xl flex items-center justify-center mx-auto mb-4">
                     <Icon className="w-7 h-7 text-indigo-400" />
                   </div>
-                  <h4 className="font-semibold mb-2">{item.title}</h4>
-                  <p className="text-slate-400 text-sm">{item.desc}</p>
+                  <h4 className="font-semibold mb-2">{t(item.titleKey)}</h4>
+                  <p className="text-slate-400 text-sm">{t(item.descKey)}</p>
                 </div>
               );
             })}
@@ -785,8 +809,8 @@ function App() {
 
           <div className="mt-12 p-8 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 rounded-2xl border border-indigo-500/30">
             <div className="text-center">
-              <h4 className="text-xl font-semibold mb-3">Compatible With</h4>
-              <p className="text-slate-400">Airline miles programs, Club memberships, Brand loyalty programs, and more</p>
+              <h4 className="text-xl font-semibold mb-3">{t('membership.compatible')}</h4>
+              <p className="text-slate-400">{t('membership.compatibleDesc')}</p>
             </div>
           </div>
         </div>
@@ -796,14 +820,14 @@ function App() {
       <section className="py-24 px-4 sm:px-6 bg-gradient-to-b from-slate-900 to-slate-950">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Ready to Transform Your Digital Experience?
+            {t('cta.title')}
           </h2>
           <p className="text-xl text-slate-300 mb-10">
-            Join DigiTree.ph and be part of the future of digital ownership in the Philippines.
+            {t('cta.description')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button className="px-8 py-4 bg-gradient-to-r from-emerald-500 to-purple-500 hover:from-emerald-400 hover:to-purple-400 rounded-xl font-semibold text-lg transition shadow-lg">
-              Get Started Today
+              {t('cta.getStarted')}
             </button>
             <a
               href="https://seemynft.page"
@@ -811,7 +835,7 @@ function App() {
               rel="noopener noreferrer"
               className="px-8 py-4 border border-slate-600 hover:border-slate-500 rounded-xl font-semibold text-lg transition flex items-center justify-center gap-2"
             >
-              Visit SeeMyNFT.page <ExternalLink className="w-5 h-5" />
+              {t('cta.visitPlatform')} <ExternalLink className="w-5 h-5" />
             </a>
           </div>
         </div>
@@ -827,41 +851,41 @@ function App() {
                 <span className="text-xl font-bold">DigiTree.ph</span>
               </div>
               <p className="text-slate-400 text-sm">
-                The future of digital ownership for music, entertainment, and beyond.
+                {t('footer.description')}
               </p>
             </div>
             <div>
-              <h4 className="font-semibold mb-4">Services</h4>
+              <h4 className="font-semibold mb-4">{t('footer.servicesTitle')}</h4>
               <div className="space-y-2 text-sm text-slate-400">
-                <a href="#music" className="block hover:text-white transition">Music & Entertainment</a>
-                <a href="#ticketing" className="block hover:text-white transition">NFT Ticketing</a>
-                <a href="#fanclubs" className="block hover:text-white transition">Fan Clubs</a>
-                <a href="#art" className="block hover:text-white transition">Art</a>
+                <a href="#music" className="block hover:text-white transition">{t('footer.servicesLinks.music')}</a>
+                <a href="#ticketing" className="block hover:text-white transition">{t('footer.servicesLinks.ticketing')}</a>
+                <a href="#fanclubs" className="block hover:text-white transition">{t('footer.servicesLinks.fanClubs')}</a>
+                <a href="#art" className="block hover:text-white transition">{t('footer.servicesLinks.art')}</a>
               </div>
             </div>
             <div>
-              <h4 className="font-semibold mb-4">Platform</h4>
+              <h4 className="font-semibold mb-4">{t('footer.platformTitle')}</h4>
               <div className="space-y-2 text-sm text-slate-400">
-                <a href="#payments" className="block hover:text-white transition">Payments</a>
-                <a href="#membership" className="block hover:text-white transition">Membership</a>
-                <a href="#apps" className="block hover:text-white transition">Apps</a>
+                <a href="#payments" className="block hover:text-white transition">{t('footer.platformLinks.payments')}</a>
+                <a href="#membership" className="block hover:text-white transition">{t('footer.platformLinks.membership')}</a>
+                <a href="#apps" className="block hover:text-white transition">{t('footer.platformLinks.apps')}</a>
                 <a href="https://seemynft.page" target="_blank" rel="noopener noreferrer" className="block hover:text-white transition">SeeMyNFT.page</a>
               </div>
             </div>
             <div>
-              <h4 className="font-semibold mb-4">Contact</h4>
+              <h4 className="font-semibold mb-4">{t('footer.contactTitle')}</h4>
               <div className="space-y-2 text-sm text-slate-400">
-                <p>Philippines</p>
+                <p>{t('footer.country')}</p>
                 <p>info@digitree.ph</p>
               </div>
             </div>
           </div>
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-8 border-t border-slate-800">
             <p className="text-slate-500 text-sm">
-              Powered by <a href="https://seemynft.page" target="_blank" rel="noopener noreferrer" className="text-emerald-400 hover:text-emerald-300">SeeMyNFT.page</a> Technology
+              {t('footer.poweredBy')} <a href="https://seemynft.page" target="_blank" rel="noopener noreferrer" className="text-emerald-400 hover:text-emerald-300">SeeMyNFT.page</a> {t('footer.technology')}
             </p>
             <p className="text-slate-500 text-sm">
-              &copy; 2025 DigiTree.ph. All rights reserved.
+              {t('footer.copyright')}
             </p>
           </div>
         </div>
